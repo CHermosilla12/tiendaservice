@@ -4,33 +4,32 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tienda {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
-    @Size(min = 3, max = 100)
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
     private String Nombre;
 
-    @NotBlank
+    @NotBlank(message = "La ubicación no puede estar vacía")
     private String Ubicacion;
 
-    @NotBlank
-    @Pattern(regexp = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] - ([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
+    @NotBlank(message = "El horario no puede estar vacío")
     private String Horario;
 
-    @Min(0)
-    @Max(500)
-    private int Cant_Empleados;
-
+    @Max(value = 100, message = "La cantidad de empleados no puede ser mayor a 100")
+    @Min(value = 1, message = "La cantidad de empleados debe ser al menos 1")
+    @NotNull(message = "La cantidad de empleados no puede ser nula")
+    private Integer Cant_Empleados;
 }
