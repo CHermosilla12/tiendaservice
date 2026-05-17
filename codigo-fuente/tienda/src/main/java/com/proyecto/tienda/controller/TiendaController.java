@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/tienda")
+@RequestMapping("/api/v2/tienda")
 public class TiendaController {
     
     private final TiendaService tiendaService;

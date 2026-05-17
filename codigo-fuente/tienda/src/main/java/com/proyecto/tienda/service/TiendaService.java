@@ -1,8 +1,7 @@
 package com.proyecto.tienda.service;
 
 import com.proyecto.tienda.model.Tienda;
-import com.proyecto.tienda.dto.TiendaDTO;
-import com.proyecto.tienda.dto.TiendaCreateDTO;
+import com.proyecto.tienda.dto.*;
 import com.proyecto.tienda.exception.NoEncontradoException;
 import com.proyecto.tienda.repository.TiendaRepository;
 import java.util.List;
@@ -12,9 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class TiendaService {
+
     private static final Logger log = LoggerFactory.getLogger(TiendaService.class);
 
     private final TiendaRepository tiendaRepository;
@@ -23,7 +22,6 @@ public class TiendaService {
         this.tiendaRepository = tiendaRepository;
     }
 
-    // 1. Guardar Tienda
     public TiendaDTO guardarTienda(TiendaCreateDTO createDTO){
         log.info("Iniciando el proceso de guardado para la tienda: {}", createDTO.getNombre());
         
@@ -39,7 +37,6 @@ public class TiendaService {
         return convertirATiendaDTO(tiendaGuardada);
     }
 
-    // 2. Validar Tienda Manual
     public List<String> validarTiendaManual(TiendaCreateDTO dto) {
         log.info("Ejecutando validación manual para la tienda: {}", dto.getNombre());
         List<String> errores = new ArrayList<>();
@@ -73,7 +70,6 @@ public class TiendaService {
         return errores;
     }
     
-    // 3. Listar Tiendas
     public List<TiendaDTO> listarTiendas(){
         log.info("Solicitando el listado completo de tiendas desde la base de datos");
         List<Tienda> tiendas = tiendaRepository.findAll();
@@ -84,12 +80,13 @@ public class TiendaService {
                 .collect(Collectors.toList());
     }
 
-    // 4. Buscar con ID
     public TiendaDTO buscarConID(Long id){
+        if (id == null) {
+            log.error("Error de búsqueda: El ID proporcionado es nulo");
+            throw new IllegalArgumentException("El ID de la tienda no puede ser nulo");
+        }
         log.info("Buscando tienda con ID: {}", id);
-        
-        Tienda tienda = tiendaRepository.findById(id)
-                .orElseThrow(() -> {
+        Tienda tienda = tiendaRepository.findById(id).orElseThrow(() -> {
                     log.error("Error: No se encontró la tienda con ID: {}", id);
                     return new NoEncontradoException("Tienda no encontrada con el ID: " + id);
                 });
@@ -98,10 +95,12 @@ public class TiendaService {
         return convertirATiendaDTO(tienda);
     }
 
-    // 5. Actualizar Tienda
     public TiendaDTO actualizarTienda (Long id, TiendaCreateDTO detallesTiendaDTO){
+        if (id == null) {
+            log.error("Error de actualización: El ID proporcionado es nulo");
+            throw new IllegalArgumentException("El ID de la tienda no puede ser nulo");
+        }
         log.info("Iniciando actualización para la tienda con ID: {}", id);
-        
         Tienda tiendaExiste = tiendaRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Error de actualización: Tienda con ID: {} no existe", id);
@@ -119,10 +118,12 @@ public class TiendaService {
         return convertirATiendaDTO(tiendaActualizada);
     }
 
-    // 6. Quitar Tienda
     public boolean quitarTienda (Long id){
+        if (id == null) {
+            log.error("Error de eliminación: El ID proporcionado es nulo");
+            throw new IllegalArgumentException("El ID de la tienda no puede ser nulo");
+        }
         log.info("Solicitud para eliminar la tienda con ID: {}", id);
-        
         if (tiendaRepository.existsById(id)){
             tiendaRepository.deleteById(id);
             log.info("Tienda con ID: {} eliminada físicamente con éxito", id);
@@ -133,7 +134,6 @@ public class TiendaService {
         return false;
     }
 
-    // --- MÉTODO PRIVADO DE CONVERSIÓN INTERNA ---
     private TiendaDTO convertirATiendaDTO(Tienda tienda) {
         TiendaDTO dto = new TiendaDTO();
         dto.setId(tienda.getId());

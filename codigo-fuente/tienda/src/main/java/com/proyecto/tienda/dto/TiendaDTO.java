@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class TiendaDTO {
     
     private Long id;
-    private String nombre;
-    private String ubicacion;
-    private String horario;
-    private Integer cant_Empleados;
+    private String Nombre;
+    private String Ubicacion;
+    private String Horario;
+    private Integer Cant_Empleados;
 }
