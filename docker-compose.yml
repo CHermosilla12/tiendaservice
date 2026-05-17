@@ -35,7 +35,7 @@ services:
     command: tail -f /dev/null
     # Vinculamos la carpeta vacía local con la ruta '/app' del contenedor.
     volumes:
-      - ./.:/app
+      - ./codigo-fuente:/app
     # Por defecto, el contenedor iniciará en la carpeta /app
     working_dir: /app
   
