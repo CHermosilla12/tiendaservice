@@ -53,6 +53,7 @@ public class TiendaController {
     //Listar todo
     @Operation(summary = "Listar todas las tiendas", description = "Obtiene una lista de todas las tiendas registradas")
     @ApiResponse(responseCode = "200", description = "Lista de tiendas obtenida exitosamente")
+    @GetMapping
     public List<TiendaDTO> listarDatos() {
         return tiendaService.listarTiendas();
     }
